@@ -1,19 +1,17 @@
 *{
-    padding: 0%;
     margin: 0%;
+    padding: 0%;
 }
-h1{
-    font-size: 10vh;
+.mainDiv, .questionPanel
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+
 }
 .mainDiv{
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    height: 100vh;
-}
-.questionPanel, .ansPanel{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    margin: auto;
+    width: 50%;
 }
