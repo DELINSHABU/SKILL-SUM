@@ -101,6 +101,7 @@ function reload() {
 const MainCompo = () => {
   const [fNo , updatedFno] = useState(getRandomNumberFun(200,10))
   const [sNo , updatedSno] = useState(getRandomNumberFun(200,10))
+  const [optoin01,upadtedOption01] = useState
   const [result, setResult] = useState("");
   
   const handleButtonClick = (answer) => {
