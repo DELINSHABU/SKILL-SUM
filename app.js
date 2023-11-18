@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import ReactDom from "react-dom/client";
 
+function getRandomNumberFun(high , low){
+  return Math.floor(Math.random() * (high ) + low);
+}
+const getRandomNumber = getRandomNumberFun()
+
 //* Making random numbers
 //? Number will random between 50 to 10
-let fNo = Math.floor(Math.random() * 20) + 10;
-let sNo = Math.floor(Math.random() * 20) + 10;
+let fNo = getRandomNumberFun(200,10)
+console.log("fNo: ", fNo);
+let sNo = getRandomNumberFun(200,10)
+console.log("sNo: ", sNo);
 
-function getRandomNumber(){
-    let fNo = Math.floor(Math.random() * 20) + 10;
-    let sNo = Math.floor(Math.random() * 20) + 10;
+function getRandomNumbers(){
+  let fNo = Math.floor(Math.random() * 200) + 10;
+  // console.log("fNo: ", fNo);
+  let sNo = Math.floor(Math.random() * 200) + 10;
+  // console.log("sNo: ", sNo);
+
+  return (fNo ,sNo)
 }
+
+
 //* Making random ANSWERS
 //? other three option rather correct it they will plus and minus between 1 to 10 that those random
 let ansNo01 = Math.floor(Math.random() * 10) + 1;
@@ -47,7 +60,7 @@ function option(){
 
 //* set array and that option function
 const optionArray= option()
-console.log(option())
+// console.log(option())
 
 
 //* adding options to the page
@@ -56,27 +69,58 @@ const optionNode01 = ansArray[optionArray[0]]
 const optionNode02 = ansArray[optionArray[1]]
 const optionNode03 = ansArray[optionArray[2]]
 
-console.log(optionNode01,optionNode02,optionNode03)
+// console.log(optionNode01,optionNode02,optionNode03)
+
+// setInterval(reload, 10000)
+// setInterval(reloadMsg, 10000)
+
+let count = 100
+
+// const timer = setInterval(() => {
+//   console.log(count--)
+//   document.getElementById("countdown").innerText = count
+// }, 1000);
+
+function clearTime() {
+  window.location.reload()
+  clearTimeout(timer)
+
+}
+setTimeout(clearTime, count*1100)
 
 
-
+function reloadMsg() {
+  console.log(reload)
+}
+function reload() {
+  console.log(reload)
+  window.location.reload();
+}
 
 
 const MainCompo = () => {
+  const [fNo , updatedFno] = useState(getRandomNumberFun(200,10))
+  const [sNo , updatedSno] = useState(getRandomNumberFun(200,10))
   const [result, setResult] = useState("");
-
+  
   const handleButtonClick = (answer) => {
     // Handle button click here
     console.log("Button clicked with answer:", answer);
     if (fNo + sNo === answer) {
       setResult("Correct");
+      // updatedFno()
       // Reload the website if the answer is correct
-      window.location.reload();
+      // window.location.reload();
+      updatedFno (getRandomNumbers())
+      updatedSno (getRandomNumbers())
+      console.log(fNo,""+"",sNo)
+      console.log(fNo+sNo)
     } else {
       setResult("Wrong");
+      console.log(fNo+sNo)
     }
   };
-
+  
   return (
     <div className="mainDiv">
       <div className="logo">
@@ -100,6 +144,7 @@ const MainCompo = () => {
         </button>
         </div>
       </div>
+      <div id="countdown">{count}</div>
       <p>{result}</p>
     </div>
   );
