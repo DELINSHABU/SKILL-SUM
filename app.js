@@ -1,111 +1,113 @@
-import React, { useState } from "react";
-import ReactDom from "react-dom/client";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
 
-//* Making random numbers
-//? Number will random between 50 to 10
-let fNo = Math.floor(Math.random() * 20) + 10;
-let sNo = Math.floor(Math.random() * 20) + 10;
-
-function getRandomNumber(){
-    let fNo = Math.floor(Math.random() * 20) + 10;
-    let sNo = Math.floor(Math.random() * 20) + 10;
+function RandomNumber(high, low) {
+  return Math.floor(Math.random() * high) + low;
 }
-//* Making random ANSWERS
-//? other three option rather correct it they will plus and minus between 1 to 10 that those random
-let ansNo01 = Math.floor(Math.random() * 10) + 1;
-let ansNo02 = Math.floor(Math.random() * 10) + 1;
 
-//* Answer panel
-//? other ans02node other random number which small difference than correct answer
-const ans01Node = fNo + sNo - ansNo01;
-const ans02Node = fNo + sNo;
-const ans03Node = fNo + sNo + ansNo02;
+function generateNewQuestion() {
+  const fNo = RandomNumber(20, 10);
+  const sNo = RandomNumber(20, 10);
+  const ansNo01 = RandomNumber(10, 1);
+  const ansNo02 = RandomNumber(10, 1);
+  const ansArray = [fNo + sNo - ansNo01, fNo + sNo, fNo + sNo + ansNo02];
 
-//* putting all ansNode to answer array
-let ansArray = [ans01Node,ans02Node,ans03Node]
 
-//* Shuffling the options
-//? getting 3 values and store it in array also making sure that 3 values are different
-function option(){
-    //? getting storing 3 random numbers
-    let option01 = Math.floor(Math.random() * 3);
-    let option02 = Math.floor(Math.random() * 3);
-    let option03 = Math.floor(Math.random() * 3);
-    
-    //? math operation running until 3 three values are different
-    while(option02 === option01){
-        option02 = Math.floor(Math.random() * 3);
-    }
+  //* generating Options 
+  const optionArray = option();
+  const optionNode01 = ansArray[optionArray[0]];
+  const optionNode02 = ansArray[optionArray[1]];
+  const optionNode03 = ansArray[optionArray[2]];
+  console.log(ansArray[1])
 
-    while(option03 === option01 || option03 === option02){
-        option03 = Math.floor(Math.random() * 3);
-    }
-    //? return those 3 value in array
-    return ([option01,option02,option03])
+  return { fNo, sNo, optionNode01, optionNode02, optionNode03 };
+}
+
+//* this function is for generate random three numbers between 0-2
+function option() {
+  let option01 = RandomNumber(3, 0);
+  let option02 = RandomNumber(3, 0);
+  let option03 = RandomNumber(3, 0);
+
+  while (option02 === option01) {
+    option02 = Math.floor(Math.random() * 3);
+  }
+
+  while (option03 === option01 || option03 === option02) {
+    option03 = Math.floor(Math.random() * 3);
+  }
+
+  return [option01, option02, option03];
 }
 
 
-//* set array and that option function
-const optionArray= option()
-console.log(option())
 
-
-//* adding options to the page
-//? getting option from ansArray and shuffling array index using optionArray
-const optionNode01 = ansArray[optionArray[0]]
-const optionNode02 = ansArray[optionArray[1]]
-const optionNode03 = ansArray[optionArray[2]]
-
-console.log(optionNode01,optionNode02,optionNode03)
-
-
-
-
+const optionNode = option()
+// console.log(optionNode)
 
 const MainCompo = () => {
+  const [question, setQuestion] = useState(generateNewQuestion);
   const [result, setResult] = useState("");
+  const [timer, setTimer] = useState(10000); // 10 seconds in milliseconds
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimer((prevTimer) => prevTimer - 10); // decrement by 10 milliseconds
+    }, 10);
+
+    return () => clearInterval(timerId);
+  }, []);
+
+  useEffect(() => {
+    if (timer === 0) {
+      setQuestion(generateNewQuestion());
+      setTimer(10000);
+      setResult("Time's up!");
+    }
+  }, [timer]);
 
   const handleButtonClick = (answer) => {
-    // Handle button click here
-    console.log("Button clicked with answer:", answer);
-    if (fNo + sNo === answer) {
+    clearInterval(timer); // Reset the timer when a button is clicked
+    if (question.fNo + question.sNo === answer) {
       setResult("Correct");
-      // Reload the website if the answer is correct
-      window.location.reload();
+      setQuestion(generateNewQuestion);
+      setTimer(10000);
     } else {
       setResult("Wrong");
     }
   };
 
+  const seconds = Math.floor(timer / 1000);
+  const milliseconds = (timer % 1000)/10;
+  // console.log(milliseconds/10)
   return (
     <div className="mainDiv">
       <div className="logo">
         <h1> SKILL SUM</h1>
       </div>
       <div className="questionPanel">
-        <h1 className="no1">{fNo}</h1>
+        <h1 className="no1">{question.fNo}</h1>
         <h1>+</h1>
-        <h1 className="no2">{sNo}</h1>
+        <h1 className="no2">{question.sNo}</h1>
       </div>
       <div className="ansPanel">
         <div className="frow">
-        <button onClick={() => handleButtonClick(optionNode01)}>
-          <h1 className="ans01">{optionNode01}</h1>
-        </button>
-        <button onClick={() => handleButtonClick(optionNode02)}>
-          <h1 className="ans02">{optionNode02}</h1>
-        </button>
-        <button onClick={() => handleButtonClick(optionNode03)}>
-          <h1 className="ans03">{optionNode03}</h1>
-        </button>
+          <button onClick={() => handleButtonClick(question.optionNode01)}>
+            <h1 className="ans01">{question.optionNode01}</h1>
+          </button>
+          <button onClick={() => handleButtonClick(question.optionNode02)}>
+            <h1 className="ans02">{question.optionNode02}</h1>
+          </button>
+          <button onClick={() => handleButtonClick(question.optionNode03)}>
+            <h1 className="ans03">{question.optionNode03}</h1>
+          </button>
         </div>
       </div>
+      <h2 className="Timer">{seconds}:{milliseconds}</h2>
       <p>{result}</p>
     </div>
   );
 };
 
-console.log(fNo+sNo)
-// Render
-const root = ReactDom.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<MainCompo />);
