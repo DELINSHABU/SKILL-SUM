@@ -6,8 +6,8 @@ function RandomNumber(high, low) {
 }
 
 function generateNewQuestion() {
-  const fNo = RandomNumber(20, 10);
-  const sNo = RandomNumber(20, 10);
+  const fNo = RandomNumber(15, 10);
+  const sNo = RandomNumber(15, 10);
   const ansNo01 = RandomNumber(10, 1);
   const ansNo02 = RandomNumber(10, 1);
   const ansArray = [fNo + sNo - ansNo01, fNo + sNo, fNo + sNo + ansNo02];
@@ -48,12 +48,12 @@ const optionNode = option()
 const MainCompo = () => {
   const [question, setQuestion] = useState(generateNewQuestion);
   const [result, setResult] = useState("");
-  const [timer, setTimer] = useState(10000); // 10 seconds in milliseconds
+  const [timer, setTimer] = useState(5000); // 5 seconds in milliseconds
 
   useEffect(() => {
     const timerId = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 10); // decrement by 10 milliseconds
-    }, 10);
+      setTimer((prevTimer) => prevTimer - 1000); // decrement by 10 milliseconds
+    }, 1000);
 
     return () => clearInterval(timerId);
   }, []);
@@ -61,7 +61,7 @@ const MainCompo = () => {
   useEffect(() => {
     if (timer === 0) {
       setQuestion(generateNewQuestion());
-      setTimer(10000);
+      setTimer(5000);
       setResult("Time's up!");
     }
   }, [timer]);
@@ -71,7 +71,7 @@ const MainCompo = () => {
     if (question.fNo + question.sNo === answer) {
       setResult("Correct");
       setQuestion(generateNewQuestion);
-      setTimer(10000);
+      setTimer(5000);
     } else {
       setResult("Wrong");
     }
@@ -103,7 +103,7 @@ const MainCompo = () => {
           </button>
         </div>
       </div>
-      <h2 className="Timer">{seconds}:{milliseconds}</h2>
+      <h2 className="Timer">{seconds}</h2>
       <p>{result}</p>
     </div>
   );
