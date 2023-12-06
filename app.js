@@ -63,6 +63,9 @@ const MainCompo = () => {
       setQuestion(generateNewQuestion());
       setTimer(5000);
       setResult("Time's up!");
+      setTimeout(() => {
+        setResult(""); // Clear the result after 2 seconds
+      },1000);
     }
   }, [timer]);
 
@@ -72,6 +75,9 @@ const MainCompo = () => {
       setResult("Correct");
       setQuestion(generateNewQuestion);
       setTimer(5000);
+      setTimeout(() => {
+        setResult(""); // Clear the result after 2 seconds
+      },1000);
     } else {
       setResult("Wrong");
     }
@@ -81,9 +87,18 @@ const MainCompo = () => {
   const milliseconds = (timer % 1000)/10;
   // console.log(milliseconds/10)
   return (
+    <>
     <div className="mainDiv">
-      <div className="logo">
-        <h1> SKILL SUM</h1>
+      <div className="navbar">
+      <div className="settings">
+        <p>settings</p>
+      {/* <img src="settings.png" alt="Sign in" /> */}
+      </div>
+      <div className="logo"><h1> SKILL SUM</h1></div>
+      <div className="account">
+      <p>account</p>
+        {/* <img src="img" alt="account" /> */}
+        </div>
       </div>
       <div className="questionPanel">
         <h1 className="no1">{question.fNo}</h1>
@@ -106,6 +121,9 @@ const MainCompo = () => {
       <h2 className="Timer">{seconds}</h2>
       <p>{result}</p>
     </div>
+     
+    </>
+
   );
 };
 
